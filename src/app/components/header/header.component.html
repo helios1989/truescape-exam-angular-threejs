@@ -1,0 +1,11 @@
+<div id="header-wrapper" >
+    <div class="container bg">
+        <div id="header-left-content" *ngIf="isAuthenticated">
+            
+            <ul>
+                <li><a [routerLink]="['allStories']" id="allStories">Home</a></li>
+            </ul>
+        </div>
+        <img src="../../../assets/truescape-logo-light.png"/>
+    </div>
+</div>
