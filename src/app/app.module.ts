@@ -10,6 +10,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { AppSharedMaterialModule } from './shared/app.shared.material.module';
 import { LoggedinService } from './services/logged-in.service';
 import { VideoPlayerComponent } from './components/video-player/video-player.component';
+import { THREE_PROVIDER } from './interfaces/iThreeProvider';
+import { ThreeService } from './services/three.service';
 
 
 @NgModule({
@@ -28,7 +30,10 @@ import { VideoPlayerComponent } from './components/video-player/video-player.com
     BrowserAnimationsModule,
     AppSharedMaterialModule
   ],
-  providers: [LoggedinService],
+  providers: [
+    LoggedinService,
+    { provide: THREE_PROVIDER, useClass: ThreeService }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
