@@ -9,6 +9,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AppSharedMaterialModule } from './shared/app.shared.material.module';
 import { LoggedinService } from './services/logged-in.service';
+import { VideoPlayerComponent } from './components/video-player/video-player.component';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { LoggedinService } from './services/logged-in.service';
     HeaderComponent,
     HomeComponent,
     LoginComponent,
+    VideoPlayerComponent,
   ],
   imports: [
     FormsModule,

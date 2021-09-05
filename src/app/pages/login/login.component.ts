@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
     const {username,password} = this.loginForm.value;
     if (username ==='test' && password ==='test') {
       this.loggedInService.setLogin(true);
+      localStorage.setItem('token', 'responsefromlogin');
       this.router.navigate(['/home'])
     } else {
       alert('wrong username and password');

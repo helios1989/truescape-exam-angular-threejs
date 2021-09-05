@@ -1,31 +1,35 @@
-import { Injectable } from '@angular/core';
+import { Injectable, TemplateRef } from '@angular/core';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { DragControls } from 'three/examples/jsm/controls/DragControls'
 import { iThreeProvider } from '../interfaces/iThreeProvider';
-
-
+import {MatDialog} from '@angular/material/dialog';
+import { VideoPlayerComponent } from '../components/video-player/video-player.component';
+import { AppSharedMaterialModule } from '../shared/app.shared.material.module';
 @Injectable({
-  providedIn: 'root'
+  providedIn: AppSharedMaterialModule
 })
-export class ThreeService implements iThreeProvider{
+export class ThreeService implements iThreeProvider {
   canvas!: HTMLDocument;
   camera!: THREE.PerspectiveCamera;
   renderer!: THREE.WebGLRenderer;
   scene!: THREE.Scene;
   controls!: OrbitControls;
-  constructor() { }
+  
+  private terrainVideo!: TemplateRef<any>;
+  constructor(private dialog: MatDialog) { }
   // load and setup a 3d models
   // setup the canvas and mesh
   // setup the camera
   // setup the scene
   // setup the mesh
-  renderTerrain(canvas: any, pathLoader:any, ): void {
+  renderTerrain(canvas: any, pathLoader:any): void {
+
     const texturePath = '../../assets/3d-assets/Textures/185_metal-rufing-texture-seamless-2.jpg';
     this.renderer = new THREE.WebGLRenderer({canvas});
-    this.renderer.domElement.addEventListener('dblclick', this._onDblClick);
-
+    this.renderer.domElement.addEventListener('dblclick', this._onDblClick.bind(null,this.dialog));
+    // this.renderer.domElement.addEventListener.arguments('verge')
     this.camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100);
     this.camera.position.set(0, 10, 20);
     this.scene = new THREE.Scene();
@@ -72,18 +76,13 @@ export class ThreeService implements iThreeProvider{
     const pin = new THREE.TextureLoader().load( '../../assets/ui/Pin.png' );
     var marker = new THREE.SpriteMaterial( { map: pin } );
     var sprite = new THREE.Sprite( marker );
-    sprite.position.set( 1.3, 1.9, -1.7 );
-    sprite.scale.set(0.2, 0.6, 0.5 );
-
-    var marker = new THREE.SpriteMaterial( { map: pin } );
-    var sprite1 = new THREE.Sprite( marker );
-    sprite1.position.set( -2.3, 1.9, -1.9 );
-    sprite1.scale.set(0.2, 0.6, 0.5 );
+  
+    sprite.position.set( 200,100,100 );
+    sprite.scale.set(5,700,50);
 
     //Group the markers to set them relative to the map
     var group = new THREE.Object3D;
     group.add(sprite);
-    group.add(sprite1);
     this.scene.add(group);
   }
   private _render = () =>  {
@@ -131,9 +130,10 @@ export class ThreeService implements iThreeProvider{
     this.scene.add(light);
     this.scene.add(light.target);
   }
-  private _onDblClick(event: any){
-    console.log(event)
+  private _onDblClick(dialog: MatDialog): void {
+    dialog.open(VideoPlayerComponent);
   }
+
   private _loadGltf(pathLoader: any): void{
     const gltfLoader = new GLTFLoader();
     gltfLoader.load(pathLoader, (gltf) => {

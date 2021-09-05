@@ -1,21 +1,3 @@
-<button (click)="openVideo()">Video</button>
+<button id="openVideo" >Video</button>
 <mat-slide-toggle [formControl]="toggle" (change)="onChangeToggle()">{{mining}}</mat-slide-toggle>
 <canvas id="terrain" #terrainCanvas></canvas>
-<ng-template #terrainVideo>
-    <mat-dialog-content > 
-        <div >
-            <video 
-                id="video" 
-                crossOrigin="anonymous" 
-                playsinline controls
-                [src]= "videoPath" 
-                type='video/mp'> 
-            </video>
-        </div>
-    </mat-dialog-content>
-    <div mat-dialog-actions>
-        <button mat-button mat-dialog-close class="btn btn-primary btn-block" >
-            Close
-        </button>
-    </div>
-</ng-template>
