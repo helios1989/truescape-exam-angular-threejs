@@ -12,4 +12,8 @@ export class LoggedinService {
       this.authenticationStatus.next(newState);
     }
 
+    setLogout() {
+      this.authenticationStatus.next(false);
+    }
+
 }

@@ -10,20 +10,21 @@ import { iThreeProvider } from '../interfaces/iThreeProvider';
   providedIn: 'root'
 })
 export class ThreeService implements iThreeProvider{
-  canvas: any;
-  camera: any;
-  renderer: any;
-  scene: any;
-  controls: any;
+  canvas!: HTMLDocument;
+  camera!: THREE.PerspectiveCamera;
+  renderer!: THREE.WebGLRenderer;
+  scene!: THREE.Scene;
+  controls!: OrbitControls;
   constructor() { }
-  buildCamera() {}
   // load and setup a 3d models
   // setup the canvas and mesh
   // setup the camera
   // setup the scene
   // setup the mesh
-  renderTerrain(canvas: any, pathLoader:any): void {
+  renderTerrain(canvas: any, pathLoader:any, ): void {
+    const texturePath = '../../assets/3d-assets/Textures/185_metal-rufing-texture-seamless-2.jpg';
     this.renderer = new THREE.WebGLRenderer({canvas});
+    this.renderer.domElement.addEventListener('dblclick', this._onDblClick);
 
     this.camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100);
     this.camera.position.set(0, 10, 20);
@@ -31,20 +32,23 @@ export class ThreeService implements iThreeProvider{
     this.controls = new OrbitControls(this.camera, canvas);
     this.controls.target.set(0, 5, 0);
     this.controls.update();
-  
-    this.scene.background = new THREE.Color('black');
-  
-    const planeSize = 40;
 
+    this._setupMesh(texturePath);
+    this._setupScene();
+    this._loadGltf(pathLoader);
+    requestAnimationFrame(this._render);
+  }
+  private _setupMesh(texturePath: string) {
+    this.scene.background = new THREE.Color('black');
     const loader = new THREE.TextureLoader();
-    const texture = loader.load('../../assets/3d-assets/ui/Existing.jpg');
+    const texture = loader.load(texturePath);
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
     texture.magFilter = THREE.NearestFilter;
+    const planeSize = 40;
+    const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
     const repeats = planeSize / 2;
     texture.repeat.set(repeats, repeats);
-
-    const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
     const planeMat = new THREE.MeshPhongMaterial({
       map: texture,
       side: THREE.DoubleSide,
@@ -52,9 +56,6 @@ export class ThreeService implements iThreeProvider{
     const mesh = new THREE.Mesh(planeGeo, planeMat);
     mesh.rotation.x = Math.PI * -.5;
     this.scene.add(mesh);
-    this._setupScene();
-    this._loadGltf(pathLoader);
-    requestAnimationFrame(this._render);
   }
   private _resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
     const canvas = renderer.domElement;
@@ -66,13 +67,32 @@ export class ThreeService implements iThreeProvider{
     }
     return needResize;
   }
+
+  private _addPin() {
+    const pin = new THREE.TextureLoader().load( '../../assets/ui/Pin.png' );
+    var marker = new THREE.SpriteMaterial( { map: pin } );
+    var sprite = new THREE.Sprite( marker );
+    sprite.position.set( 1.3, 1.9, -1.7 );
+    sprite.scale.set(0.2, 0.6, 0.5 );
+
+    var marker = new THREE.SpriteMaterial( { map: pin } );
+    var sprite1 = new THREE.Sprite( marker );
+    sprite1.position.set( -2.3, 1.9, -1.9 );
+    sprite1.scale.set(0.2, 0.6, 0.5 );
+
+    //Group the markers to set them relative to the map
+    var group = new THREE.Object3D;
+    group.add(sprite);
+    group.add(sprite1);
+    this.scene.add(group);
+  }
   private _render = () =>  {
+    this._addPin(); 
     if (this._resizeRendererToDisplaySize(this.renderer)) {
       const canvas = this.renderer.domElement;
       this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
       this.camera.updateProjectionMatrix();
     }
-
     this.renderer.render(this.scene, this.camera);
 
     requestAnimationFrame(this._render);
@@ -111,7 +131,9 @@ export class ThreeService implements iThreeProvider{
     this.scene.add(light);
     this.scene.add(light.target);
   }
-
+  private _onDblClick(event: any){
+    console.log(event)
+  }
   private _loadGltf(pathLoader: any): void{
     const gltfLoader = new GLTFLoader();
     gltfLoader.load(pathLoader, (gltf) => {

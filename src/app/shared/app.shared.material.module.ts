@@ -10,6 +10,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { NgModule } from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 const listModule = [
     MatToolbarModule,
@@ -22,7 +23,8 @@ const listModule = [
     MatInputModule,
     MatNativeDateModule,
     MatCardModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSlideToggleModule
 ];
 
 @NgModule({
