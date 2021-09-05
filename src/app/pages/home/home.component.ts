@@ -1,6 +1,8 @@
 import { Component, OnInit,ViewChild, AfterViewInit, TemplateRef } from '@angular/core';
 import { ThreeService } from '../../services/three.service';
 import { FormControl } from '@angular/forms';
+import { appConstants } from 'src/app/constants/appConstants';
+const canvas: any = document.getElementById('terrain');
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -14,7 +16,7 @@ export class HomeComponent implements OnInit {
    }
   
   ngAfterViewInit() {
-    const path = '../../../assets/3d-assets/Terrain_Existing.gltf';
+    const path =  appConstants.homeComponent.terrainExisting;
     const canvas: any = document.getElementById('terrain');
     this.threeService.renderTerrain(canvas, path);
   }
@@ -23,13 +25,11 @@ export class HomeComponent implements OnInit {
   onChangeToggle() {
     if (this.toggle.value) {
       this.mining = 'Mining'
-      const canvas: any = document.getElementById('terrain');
-      const initPath = '../../../assets/3d-assets/Mining_Facilities.gltf';
+      const initPath = appConstants.homeComponent.miningFacilities;
       this.threeService.renderTerrain(canvas, initPath);
     } else {
       this.mining = 'Pre Mining'
-      const path = '../../../assets/3d-assets/Terrain_Existing.gltf';
-      const canvas: any = document.getElementById('terrain');
+      const path = appConstants.homeComponent.terrainExisting;
       this.threeService.renderTerrain(canvas, path);
     }
   } 

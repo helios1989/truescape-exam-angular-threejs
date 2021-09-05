@@ -7,6 +7,7 @@ import { iThreeProvider } from '../interfaces/iThreeProvider';
 import {MatDialog} from '@angular/material/dialog';
 import { VideoPlayerComponent } from '../components/video-player/video-player.component';
 import { AppSharedMaterialModule } from '../shared/app.shared.material.module';
+import { appConstants } from '../constants/appConstants';
 @Injectable({
   providedIn: AppSharedMaterialModule
 })
@@ -26,7 +27,7 @@ export class ThreeService implements iThreeProvider {
   // setup the mesh
   renderTerrain(canvas: any, pathLoader:any): void {
 
-    const texturePath = '../../assets/3d-assets/Textures/185_metal-rufing-texture-seamless-2.jpg';
+    const texturePath = appConstants.threeService.textTurePathBem;
     this.renderer = new THREE.WebGLRenderer({canvas});
     this.renderer.domElement.addEventListener('dblclick', this._onDblClick.bind(null,this.dialog));
     // this.renderer.domElement.addEventListener.arguments('verge')
@@ -73,7 +74,7 @@ export class ThreeService implements iThreeProvider {
   }
 
   private _addPin() {
-    const pin = new THREE.TextureLoader().load( '../../assets/ui/Pin.png' );
+    const pin = new THREE.TextureLoader().load(appConstants.threeService.pinImage );
     var marker = new THREE.SpriteMaterial( { map: pin } );
     var sprite = new THREE.Sprite( marker );
   
