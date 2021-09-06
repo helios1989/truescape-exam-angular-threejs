@@ -3,7 +3,7 @@ import { ThreeService } from '../../services/three.service';
 import { FormControl } from '@angular/forms';
 import { appConstants } from 'src/app/constants/appConstants';
 import { iThreeProvider, THREE_PROVIDER } from 'src/app/interfaces/iThreeProvider';
-const canvas: any = document.getElementById('terrain');
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -12,6 +12,7 @@ const canvas: any = document.getElementById('terrain');
 export class HomeComponent implements OnInit {
   mining: string = 'Pre mining';
   toggle!: any;
+
   constructor(   
     @Inject(THREE_PROVIDER) private threeProvider: iThreeProvider) {
     this.toggle = new FormControl('', []);
@@ -19,20 +20,22 @@ export class HomeComponent implements OnInit {
   
   ngAfterViewInit() {
     const path =  appConstants.homeComponent.terrainExisting;
-    const canvas: any = document.getElementById('terrain');
-    this.threeProvider.renderTerrain(canvas, path);
+    this.threeProvider.renderTerrain(document.getElementById('terrain'), path);
   }
   ngOnInit() {}
 
   onChangeToggle() {
     if (this.toggle.value) {
+
       this.mining = 'Mining'
       const initPath = appConstants.homeComponent.miningFacilities;
-      this.threeProvider.renderTerrain(canvas, initPath);
+      console.log(initPath);
+      this.threeProvider.renderTerrain(document.getElementById('terrain'), initPath);
     } else {
+
       this.mining = 'Pre Mining'
       const path = appConstants.homeComponent.terrainExisting;
-      this.threeProvider.renderTerrain(canvas, path);
+      this.threeProvider.renderTerrain(document.getElementById('terrain'), path);
     }
   } 
 }

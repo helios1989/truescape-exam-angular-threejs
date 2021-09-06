@@ -26,21 +26,21 @@ export class ThreeService implements iThreeProvider {
   // setup the scene
   // setup the mesh
   renderTerrain(canvas: any, pathLoader:any): void {
-
+    
     const texturePath = appConstants.threeService.textTurePathBem;
     this.renderer = new THREE.WebGLRenderer({canvas});
     this.renderer.domElement.addEventListener('dblclick', this._onDblClick.bind(null,this.dialog));
-    // this.renderer.domElement.addEventListener.arguments('verge')
     this.camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100);
     this.camera.position.set(0, 10, 20);
     this.scene = new THREE.Scene();
     this.controls = new OrbitControls(this.camera, canvas);
     this.controls.target.set(0, 5, 0);
     this.controls.update();
-
     this._setupMesh(texturePath);
     this._setupScene();
-    this._loadGltf(pathLoader);
+    this._loadGltf('https://cs11003200160f25751.blob.core.windows.net/azure-truescape1/Terrain_Existing.gltf');
+
+   
     requestAnimationFrame(this._render);
   }
   private _setupMesh(texturePath: string) {
@@ -79,7 +79,7 @@ export class ThreeService implements iThreeProvider {
     var sprite = new THREE.Sprite( marker );
   
     sprite.position.set( 200,100,100 );
-    sprite.scale.set(5,700,50);
+    sprite.scale.set(15,200,50);
 
     //Group the markers to set them relative to the map
     var group = new THREE.Object3D;
@@ -87,7 +87,7 @@ export class ThreeService implements iThreeProvider {
     this.scene.add(group);
   }
   private _render = () =>  {
-    this._addPin(); 
+  
     if (this._resizeRendererToDisplaySize(this.renderer)) {
       const canvas = this.renderer.domElement;
       this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
